@@ -4,9 +4,17 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import org.apache.commons.collections.Unmodifiable;
+import org.apache.commons.collections.comparators.NullComparator;
+import org.apache.commons.collections.list.UnmodifiableList;
 import org.apache.tomcat.util.codec.binary.Base64;
 
 import java.io.*;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.Objects;
+import java.util.Optional;
 
 @WebServlet(
         name = "Servlet",
@@ -36,7 +44,7 @@ public class Servlet extends HttpServlet {
             }
         }
 
-        if (null == data) {
+        if (null == data || data.getName().isEmpty()) {
             data = new Data("Witaj nieznajomy!");
         }
 
