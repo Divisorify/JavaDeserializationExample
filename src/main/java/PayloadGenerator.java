@@ -1,4 +1,4 @@
-package org.example;
+
 
 import org.apache.commons.collections.Transformer;
 import org.apache.commons.collections.functors.ChainedTransformer;
